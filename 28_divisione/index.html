@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Divisione tra Polinomi - Esempi Interattivi</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f5f5f0;
+    color: #1a1a1a;
+    line-height: 1.6;
+    padding: 1.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    color: #111;
+  }
+  .subtitle {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 2rem;
+  }
+  .example-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .example-header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1rem;
+  }
+  .example-badge {
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.7rem;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .example-badge.green { background: #16a34a; }
+  .example-badge.orange { background: #d97706; }
+  .example-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+  .problem-box {
+    background: #f8f8f5;
+    border: 1px solid #e0e0d8;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.2rem;
+    font-size: 1.1rem;
+    text-align: center;
+  }
+  .step {
+    display: none;
+    border-left: 3px solid #ccc;
+    padding: 0.8rem 1rem 0.8rem 1.2rem;
+    margin: 0.5rem 0;
+    border-radius: 0 8px 8px 0;
+    background: #fafaf8;
+    animation: fadeIn 0.35s ease;
+  }
+  .step.visible { display: block; }
+  .step.highlight {
+    border-left-color: #2563eb;
+    background: #eff6ff;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .step-number {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #fff;
+    background: #2563eb;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+  .step-label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #1a1a1a;
+  }
+  .step-explain {
+    margin-top: 0.4rem;
+    font-size: 0.9rem;
+    color: #444;
+  }
+  .step-math {
+    margin-top: 0.5rem;
+    font-size: 1.05rem;
+    padding: 0.5rem 0.8rem;
+    background: #fff;
+    border: 1px solid #e5e5e0;
+    border-radius: 6px;
+    display: inline-block;
+  }
+  .division-table {
+    margin: 0.5rem auto;
+    font-size: 1.1rem;
+  }
+  .division-table td {
+    padding: 2px 6px;
+    text-align: right;
+    font-family: 'KaTeX_Main', 'Times New Roman', serif;
+  }
+  .result-box {
+    display: none;
+    background: #f0fdf4;
+    border: 2px solid #16a34a;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin-top: 0.8rem;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    animation: fadeIn 0.4s ease;
+  }
+  .result-box.visible { display: block; }
+  .result-box.with-remainder {
+    background: #fffbeb;
+    border-color: #d97706;
+  }
+  .btn-next {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-next:hover { background: #1d4ed8; }
+  .btn-next:active { transform: scale(0.97); }
+  .btn-next:disabled {
+    background: #94a3b8;
+    cursor: default;
+  }
+  .btn-reset {
+    display: none;
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 0.8rem;
+    margin-left: 0.5rem;
+    transition: background 0.2s;
+  }
+  .btn-reset:hover { background: #e2e8f0; }
+  .progress-bar {
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: #2563eb;
+    border-radius: 2px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .rule-box {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .rule-box h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .rule-box p {
+    font-size: 0.9rem;
+    color: #444;
+    margin-bottom: 0.3rem;
+  }
+  .arrow { font-size: 1.1rem; }
+</style>
+</head>
+<body>
+
+<h1>Divisione tra Polinomi</h1>
+<p class="subtitle">Classe 1C &mdash; Esempi interattivi passo-passo. Clicca per scoprire ogni passaggio.</p>
+
+<!-- REGOLA -->
+<div class="rule-box">
+  <h3>Regola fondamentale</h3>
+  <p style="font-size:1.05rem; text-align:center; margin: 0.5rem 0;">
+    \(\text{Dividendo} = \text{Divisore} \times \text{Quoziente} + \text{Resto}\)
+  </p>
+  <p><strong>Procedura</strong> (ripeti fino alla fine):</p>
+  <p>1) Dividi il 1&deg; termine del dividendo per il 1&deg; termine del divisore</p>
+  <p>2) Moltiplica il risultato per <em>tutto</em> il divisore</p>
+  <p>3) Sottrai dal dividendo</p>
+  <p>4) Ripeti col nuovo polinomio</p>
+</div>
+
+<!-- ============================================ -->
+<!-- ESEMPIO 1 -->
+<!-- ============================================ -->
+<div class="example-card" id="ex1">
+  <div class="example-header">
+    <span class="example-badge green">Divisione esatta</span>
+    <span class="example-title">Esempio 1</span>
+  </div>
+  <div class="problem-box">
+    \((x^2 + 5x + 6) \div (x + 2)\)
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="prog1"></div></div>
+
+  <!-- Step 1 -->
+  <div class="step" data-group="ex1">
+    <span class="step-number">1</span>
+    <span class="step-label">Imposta la divisione</span>
+    <div class="step-explain">
+      Scrivi il dividendo \(x^2 + 5x + 6\) e il divisore \(x + 2\). Prepara lo spazio per il quoziente.
+    </div>
+    <div class="step-math">
+      \(\underset{\text{dividendo}}{x^2 + 5x + 6} \;\Big|\; \underset{\text{divisore}}{x + 2}\)
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="step" data-group="ex1">
+    <span class="step-number">2</span>
+    <span class="step-label">Dividi i primi termini</span>
+    <div class="step-explain">
+      Dividi il primo termine del dividendo per il primo termine del divisore: \(x^2 \div x = x\). Questo \(x\) e' il <strong>primo pezzo del quoziente</strong>.
+    </div>
+    <div class="step-math">
+      \(x^2 \div x = \boldsymbol{x}\) &larr; primo termine del quoziente
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="step" data-group="ex1">
+    <span class="step-number">3</span>
+    <span class="step-label">Moltiplica per tutto il divisore</span>
+    <div class="step-explain">
+      Moltiplica \(x\) (il pezzo trovato) per tutto il divisore \((x + 2)\):
+    </div>
+    <div class="step-math">
+      \(x \cdot (x + 2) = x^2 + 2x\)
+    </div>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="step" data-group="ex1">
+    <span class="step-number">4</span>
+    <span class="step-label">Sottrai dal dividendo</span>
+    <div class="step-explain">
+      Sottrai \(x^2 + 2x\) dal dividendo. Cambia i segni e somma:
+    </div>
+    <div class="step-math">
+      \((x^2 + 5x + 6) - (x^2 + 2x) = 3x + 6\)
+    </div>
+    <div class="step-explain" style="margin-top:0.3rem; color:#2563eb; font-weight:500;">
+      Il nuovo dividendo e' \(3x + 6\). Riparti da qui!
+    </div>
+  </div>
+
+  <!-- Step 5 -->
+  <div class="step" data-group="ex1">
+    <span class="step-number">5</span>
+    <span class="step-label">Dividi di nuovo i primi termini</span>
+    <div class="step-explain">
+      Ora dividi il primo termine del nuovo polinomio per il primo termine del divisore:
+    </div>
+    <div class="step-math">
+      \(3x \div x = \boldsymbol{3}\) &larr; secondo termine del quoziente
+    </div>
+  </div>
+
+  <!-- Step 6 -->
+  <div class="step" data-group="ex1">
+    <span class="step-number">6</span>
+    <span class="step-label">Moltiplica per tutto il divisore</span>
+    <div class="step-explain">
+      Moltiplica \(3\) per tutto il divisore \((x + 2)\):
+    </div>
+    <div class="step-math">
+      \(3 \cdot (x + 2) = 3x + 6\)
+    </div>
+  </div>
+
+  <!-- Step 7 -->
+  <div class="step" data-group="ex1">
+    <span class="step-number">7</span>
+    <span class="step-label">Sottrai e trova il resto</span>
+    <div class="step-explain">
+      Sottrai \(3x + 6\) dal polinomio rimasto:
+    </div>
+    <div class="step-math">
+      \((3x + 6) - (3x + 6) = \boldsymbol{0}\)
+    </div>
+    <div class="step-explain" style="margin-top:0.3rem; color:#16a34a; font-weight:600;">
+      Resto = 0 &rarr; La divisione e' esatta!
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div class="result-box" id="res1">
+    \((x^2 + 5x + 6) \div (x + 2) = \boldsymbol{x + 3}\)<br>
+    <span style="font-size:0.85rem; font-weight:400; color:#444;">
+      Verifica: \((x + 3)(x + 2) = x^2 + 2x + 3x + 6 = x^2 + 5x + 6\) &check;
+    </span>
+  </div>
+
+  <button class="btn-next" onclick="nextStep('ex1')">Prossimo passo <span class="arrow">&rarr;</span></button>
+  <button class="btn-reset" id="reset-ex1" onclick="resetExample('ex1')">Ricomincia</button>
+</div>
+
+<!-- ============================================ -->
+<!-- ESEMPIO 2 -->
+<!-- ============================================ -->
+<div class="example-card" id="ex2">
+  <div class="example-header">
+    <span class="example-badge orange">Con resto</span>
+    <span class="example-title">Esempio 2</span>
+  </div>
+  <div class="problem-box">
+    \((x^2 + 3x + 5) \div (x + 1)\)
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="prog2"></div></div>
+
+  <!-- Step 1 -->
+  <div class="step" data-group="ex2">
+    <span class="step-number">1</span>
+    <span class="step-label">Imposta la divisione</span>
+    <div class="step-explain">
+      Scrivi il dividendo \(x^2 + 3x + 5\) e il divisore \(x + 1\).
+    </div>
+    <div class="step-math">
+      \(\underset{\text{dividendo}}{x^2 + 3x + 5} \;\Big|\; \underset{\text{divisore}}{x + 1}\)
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="step" data-group="ex2">
+    <span class="step-number">2</span>
+    <span class="step-label">Dividi i primi termini</span>
+    <div class="step-explain">
+      Dividi il primo termine del dividendo per il primo termine del divisore:
+    </div>
+    <div class="step-math">
+      \(x^2 \div x = \boldsymbol{x}\) &larr; primo termine del quoziente
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="step" data-group="ex2">
+    <span class="step-number">3</span>
+    <span class="step-label">Moltiplica per tutto il divisore</span>
+    <div class="step-explain">
+      Moltiplica \(x\) per tutto il divisore \((x + 1)\):
+    </div>
+    <div class="step-math">
+      \(x \cdot (x + 1) = x^2 + x\)
+    </div>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="step" data-group="ex2">
+    <span class="step-number">4</span>
+    <span class="step-label">Sottrai dal dividendo</span>
+    <div class="step-explain">
+      Sottrai \(x^2 + x\) dal dividendo:
+    </div>
+    <div class="step-math">
+      \((x^2 + 3x + 5) - (x^2 + x) = 2x + 5\)
+    </div>
+    <div class="step-explain" style="margin-top:0.3rem; color:#2563eb; font-weight:500;">
+      Il nuovo dividendo e' \(2x + 5\). Riparti!
+    </div>
+  </div>
+
+  <!-- Step 5 -->
+  <div class="step" data-group="ex2">
+    <span class="step-number">5</span>
+    <span class="step-label">Dividi di nuovo i primi termini</span>
+    <div class="step-explain">
+      Dividi il primo termine del nuovo polinomio per il primo termine del divisore:
+    </div>
+    <div class="step-math">
+      \(2x \div x = \boldsymbol{2}\) &larr; secondo termine del quoziente
+    </div>
+  </div>
+
+  <!-- Step 6 -->
+  <div class="step" data-group="ex2">
+    <span class="step-number">6</span>
+    <span class="step-label">Moltiplica per tutto il divisore</span>
+    <div class="step-explain">
+      Moltiplica \(2\) per tutto il divisore \((x + 1)\):
+    </div>
+    <div class="step-math">
+      \(2 \cdot (x + 1) = 2x + 2\)
+    </div>
+  </div>
+
+  <!-- Step 7 -->
+  <div class="step" data-group="ex2">
+    <span class="step-number">7</span>
+    <span class="step-label">Sottrai e trova il resto</span>
+    <div class="step-explain">
+      Sottrai \(2x + 2\) dal polinomio rimasto:
+    </div>
+    <div class="step-math">
+      \((2x + 5) - (2x + 2) = \boldsymbol{3}\)
+    </div>
+    <div class="step-explain" style="margin-top:0.3rem; color:#d97706; font-weight:600;">
+      Resto = 3 &ne; 0 &rarr; La divisione NON e' esatta. Il resto e' 3.
+    </div>
+  </div>
+
+  <!-- Step 8 -->
+  <div class="step" data-group="ex2">
+    <span class="step-number">8</span>
+    <span class="step-label">Perche' ci fermiamo?</span>
+    <div class="step-explain">
+      Il resto \(3\) ha grado \(0\) (e' un numero). Il divisore \(x + 1\) ha grado \(1\).<br>
+      Siccome il <strong>grado del resto &lt; grado del divisore</strong>, la divisione e' finita.<br>
+      Non possiamo piu' dividere \(3\) per \(x\)!
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div class="result-box with-remainder" id="res2">
+    \((x^2 + 3x + 5) \div (x + 1)\):<br>
+    \(\boldsymbol{Q = x + 2}\), \quad \(\boldsymbol{R = 3}\)<br>
+    <span style="font-size:0.85rem; font-weight:400; color:#444;">
+      Verifica: \((x + 2)(x + 1) + 3 = x^2 + x + 2x + 2 + 3 = x^2 + 3x + 5\) &check;
+    </span>
+  </div>
+
+  <button class="btn-next" onclick="nextStep('ex2')">Prossimo passo <span class="arrow">&rarr;</span></button>
+  <button class="btn-reset" id="reset-ex2" onclick="resetExample('ex2')">Ricomincia</button>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: "\\(", right: "\\)", display: false},
+      {left: "\\[", right: "\\]", display: true}
+    ]
+  });
+});
+
+const state = {};
+
+function getSteps(group) {
+  return document.querySelectorAll(`.step[data-group="${group}"]`);
+}
+
+function getTotalSteps(group) {
+  const steps = getSteps(group);
+  return steps.length + 1; // +1 for result
+}
+
+function nextStep(group) {
+  if (!state[group]) state[group] = 0;
+
+  const steps = getSteps(group);
+  const total = steps.length;
+  const current = state[group];
+
+  // Remove highlight from previous
+  if (current > 0) {
+    steps[current - 1].classList.remove('highlight');
+  }
+
+  if (current < total) {
+    // Show next step
+    steps[current].classList.add('visible', 'highlight');
+    steps[current].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    state[group]++;
+
+    // Update progress
+    const prog = document.getElementById('prog' + group.replace('ex', ''));
+    const pct = (state[group] / getTotalSteps(group)) * 100;
+    prog.style.width = pct + '%';
+
+    // If all steps shown, next click shows result
+    if (state[group] === total) {
+      const btn = document.querySelector(`#${group} .btn-next`);
+      btn.innerHTML = 'Risultato finale <span class="arrow">&rarr;</span>';
+    }
+  } else if (current === total) {
+    // Show result
+    steps[total - 1].classList.remove('highlight');
+    const res = document.getElementById('res' + group.replace('ex', ''));
+    res.classList.add('visible');
+    renderMathInElement(res, {
+      delimiters: [
+        {left: "\\(", right: "\\)", display: false},
+        {left: "\\[", right: "\\]", display: true}
+      ]
+    });
+    res.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    // Update progress to 100%
+    const prog = document.getElementById('prog' + group.replace('ex', ''));
+    prog.style.width = '100%';
+
+    // Disable next, show reset
+    const btn = document.querySelector(`#${group} .btn-next`);
+    btn.disabled = true;
+    btn.innerHTML = 'Completato &check;';
+    document.getElementById('reset-' + group).style.display = 'inline-block';
+
+    state[group]++;
+  }
+}
+
+function resetExample(group) {
+  state[group] = 0;
+
+  // Hide all steps
+  const steps = getSteps(group);
+  steps.forEach(s => s.classList.remove('visible', 'highlight'));
+
+  // Hide result
+  const res = document.getElementById('res' + group.replace('ex', ''));
+  res.classList.remove('visible');
+
+  // Reset progress
+  const prog = document.getElementById('prog' + group.replace('ex', ''));
+  prog.style.width = '0%';
+
+  // Reset button
+  const btn = document.querySelector(`#${group} .btn-next`);
+  btn.disabled = false;
+  btn.innerHTML = 'Prossimo passo <span class="arrow">&rarr;</span>';
+  document.getElementById('reset-' + group).style.display = 'none';
+}
+</script>
+
+</body>
+</html>
